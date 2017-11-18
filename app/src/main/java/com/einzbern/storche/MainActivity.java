@@ -1,25 +1,34 @@
 package com.einzbern.storche;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 
 import com.einzbern.storche.activities.CoursesActivity;
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 public class MainActivity extends AppCompatActivity {
-    private Button skipBtn;
-
+    private MaterialCalendarView calendarView;
+    private FloatingActionButton btnGoCourse;
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        skipBtn = (Button)findViewById(R.id.button);
-        skipBtn.setOnClickListener(new View.OnClickListener() {
+        btnGoCourse = (FloatingActionButton)findViewById(R.id.main_btnCourse);
+        calendarView = (MaterialCalendarView)findViewById(R.id.materialCalendarView);
+        calendarView.setTopbarVisible(false);
+
+        setGoActivityListner();
+    }
+
+    private void setGoActivityListner(){
+        btnGoCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
+                intent = new Intent();
                 intent.setClass(MainActivity.this, CoursesActivity.class);
                 startActivity(intent);
             }

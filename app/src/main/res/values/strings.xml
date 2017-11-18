@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Storche</string>
+    <dimen name="fontSize">15sp</dimen>
 </resources>
