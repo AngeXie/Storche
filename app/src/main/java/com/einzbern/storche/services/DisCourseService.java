@@ -41,7 +41,7 @@ public class DisCourseService extends Service {
         }
     }
 
-    private String[][] getWeekCourses(){
+    public String[][] getWeekCourses(){
         weekCourses[0][0] = "数据结构\n1204";
         weekCourses[0][3] = "线性代数\n2205";
         weekCourses[1][2] = "高等数学\n4306";

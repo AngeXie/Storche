@@ -1,4 +1,4 @@
-package com.einzbern.storche.entities;
+package com.einzbern.storche.entity;
 
 /**
  * Created by Administrator on 2017/11/15.

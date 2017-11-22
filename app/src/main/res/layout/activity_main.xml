@@ -13,17 +13,20 @@
         android:layout_weight="1">
     </LinearLayout>
 
+    <!--main page-->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="10"
         android:orientation="vertical"
         android:weightSum="9">
+        <!-- Header display Date-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:weightSum="4">
+            <!--display current Date-->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -64,36 +67,36 @@
                 android:layout_weight="1">
 
             </LinearLayout>
-
         </LinearLayout>
-
+        <!--Calender Display and floate button-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="8"
             android:orientation="horizontal"
             >
+            <!--Calender Display and floate button-->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
                 android:weightSum="10"
-
                 android:orientation="vertical">
 
+                <!-- 日历-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="6"
-                    android:weightSum="1"><!-- 日历-->
+                    android:weightSum="1">
                     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
                         android:id="@+id/materialCalendarView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:mcv_firstDayOfWeek="monday"/>
-
                 </LinearLayout>
 
+                <!-- weaher and exam_time / float Button -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -107,45 +110,45 @@
                             android:layout_height="match_parent"
                             android:orientation="vertical"
                             android:layout_alignParentTop="true">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="2"
-                                android:background="#528aba"><!-- 天气-->
-
-
+                                android:background="#528aba">
                             </LinearLayout>
 
+                            <!-- 考试倒计时-->
                             <LinearLayout
+                                android:id="@+id/main_Exam"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_weight="3"
-                                android:orientation="vertical"><!-- 考试倒计时-->
-
+                                android:orientation="vertical">
+                                <!-- 标题 -->
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
                                     android:layout_marginBottom="10dp"
+                                    android:layout_marginTop="10dp"
                                     android:text="考试倒计时"
                                     android:textColor="#FFF68F45"
                                     android:textSize="20sp" />
-
+                                <!--倒计时内容-->
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="@drawable/shape_main_testlist_item"
+                                    android:background="@drawable/border_top"
                                     android:orientation="horizontal"
                                     android:paddingBottom="15dp"
                                     android:paddingTop="15dp"
                                     android:weightSum="3">
-
+                                    <!--倒计时内容-->
                                     <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="bottom"
                                         android:layout_weight="2"
-
                                         android:gravity="bottom">
 
                                         <TextView
@@ -167,6 +170,7 @@
                                             android:layout_height="wrap_content"
                                             android:text="还有"
                                             android:textSize="@dimen/fontSize" />
+
                                         <TextView
                                             android:id="@+id/tv_main_TestTime"
                                             android:layout_width="wrap_content"
@@ -182,14 +186,10 @@
                                         android:gravity="right">
 
 
-
-
                                     </LinearLayout>
                                 </LinearLayout>
 
-
                             </LinearLayout>
-
                         </LinearLayout>
 
                         <!-- float button menu -->
@@ -199,6 +199,7 @@
                             app:fab_addButtonSize="mini"
                             android:layout_alignParentRight="true">
                             <com.getbase.floatingactionbutton.FloatingActionButton
+                                android:id="@+id/main_btnNote"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 app:fab_size="mini"
@@ -214,99 +215,12 @@
                                 app:paddingStart="0px"
                                 app:fab_colorNormal="@color/colorAccent"/>
                         </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
-
-            <!-- <LinearLayout
-                 android:layout_width="0dp"
-                 android:layout_height="match_parent"
-                 android:layout_weight="1"
-                 android:orientation="horizontal"
-                 >
-
-                 <LinearLayout
-                     android:layout_width="0dp"
-                     android:layout_height="match_parent"
-                     android:layout_weight="0"
-                     >
-                     </LinearLayout>
-
-                     <LinearLayout
-                         android:layout_width="0dp"
-                         android:layout_height="match_parent"
-                         android:layout_weight="1"
-                         android:orientation="vertical"
-                         android:weightSum="104">
-
-                         <LinearLayout
-                             android:layout_width="match_parent"
-                             android:layout_height="0dp"
-                             android:layout_weight="50"
-                             android:orientation="vertical"
-                             android:weightSum="6">
-
-                             <TextView
-                                 android:layout_width="match_parent"
-                                 android:layout_height="0dp"
-                                 android:layout_weight="1"
-                                 android:gravity="center"
-                                 android:text="周" />
-
-                             <TextView
-                                 android:layout_width="match_parent"
-                                 android:layout_height="0dp"
-                                 android:layout_weight="1"
-                                 android:gravity="center"
-                                 android:text="12"
-                                 android:textColor="@color/colorWeekNum"
-                                 android:textSize="12dp" />
-
-                             <TextView
-                                 android:layout_width="match_parent"
-                                 android:layout_height="0dp"
-                                 android:layout_weight="1"
-                                 android:gravity="center"
-                                 android:text="12"
-                                 android:textColor="@color/colorWeekNum"
-                                 android:textSize="12dp" />
-
-                             <TextView
-                                 android:layout_width="match_parent"
-                                 android:layout_height="0dp"
-                                 android:layout_weight="1"
-                                 android:gravity="center"
-                                 android:text="12"
-                                 android:textColor="@color/colorWeekNum"
-                                 android:textSize="12dp" />
-
-                             <TextView
-                                 android:layout_width="match_parent"
-                                 android:layout_height="0dp"
-                                 android:layout_weight="1"
-                                 android:gravity="center"
-                                 android:text="12"
-                                 android:textColor="@color/colorWeekNum"
-                                 android:textSize="12dp" />
-
-                             <TextView
-                                 android:layout_width="match_parent"
-                                 android:layout_height="0dp"
-                                 android:layout_weight="1"
-                                 android:gravity="center"
-                                 android:text="12"
-                                 android:textColor="@color/colorWeekNum"
-                                 android:textSize="12dp" />
-
-                         </LinearLayout>
-
-
-                     </LinearLayout>
-
-
-                 </LinearLayout>
-             </LinearLayout>-->
         </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout

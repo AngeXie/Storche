@@ -120,7 +120,7 @@
                 android:gravity="center"
                 android:background="@drawable/border"/>
         </LinearLayout>
-        <!-- show coursesDetails-->
+        <!-- show courses Details-->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="5.0"
