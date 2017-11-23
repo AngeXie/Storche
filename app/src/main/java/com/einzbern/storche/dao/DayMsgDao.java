@@ -74,6 +74,14 @@ public class DayMsgDao {
     }
 
     public int deleteDayMsg(String id){
+        db = dbHelper.getWritableDatabase();
+        try {
+            db.execSQL("delete from day_msg where id=?", new String[]{id});
+        }catch (Exception e){
+            Log.e("fail to delete from msg", e.getMessage());
+            return DbHelper.QUERY_FAIL;
+        }
+        db.close();
         return DbHelper.QUERY_SUCCESS;
     }
 

@@ -21,6 +21,7 @@ public class Course {
     private ArrayList<int[]> time_spot;
     private int startWeek;
     private int endWeek;
+    private String teacher;
 
     public Course() {}
 
@@ -69,5 +70,13 @@ public class Course {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
     }
 }

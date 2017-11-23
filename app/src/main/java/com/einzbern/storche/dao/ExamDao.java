@@ -74,7 +74,17 @@ public class ExamDao {
         return DbHelper.QUERY_SUCCESS;
     }
 
-    public int deleteExam(String id){return DbHelper.QUERY_SUCCESS;}
+    public int deleteExam(String id){
+        db = dbHelper.getWritableDatabase();
+        try {
+            db.execSQL("delete from exam where id=?", new String[]{id});
+        }catch (Exception e){
+            Log.e("fail to del from exam", e.getMessage());
+            return DbHelper.QUERY_FAIL;
+        }
+        db.close();
+        return DbHelper.QUERY_SUCCESS;
+    }
 
     public int updateExam(String id, String whichValue, String newValue){return DbHelper.QUERY_SUCCESS;}
 
