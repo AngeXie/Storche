@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <!--    边框颜色 -->
+            <solid android:color="#ccc"/>
+        </shape>
+    </item>
+    <!-- 给View的左设置边框 -->
+    <item android:right="0.5dip"  >
+        <shape>
+            <solid android:color="#fafafa" />
+        </shape>
+    </item>
+
+</layer-list>

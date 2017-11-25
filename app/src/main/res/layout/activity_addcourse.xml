@@ -76,6 +76,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:background="@drawable/border">
+            <!-- get course_name -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -96,6 +97,7 @@
                     android:gravity="bottom"
                     android:layout_height="match_parent">
                     <com.rengwuxian.materialedittext.MaterialEditText
+                        android:id="@+id/edt_course_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="请输入课名" />
@@ -104,6 +106,7 @@
                         android:layout_height="0.5dp"/>
                 </LinearLayout>
             </LinearLayout>
+            <!-- get course_spot -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -124,14 +127,16 @@
                     android:gravity="bottom"
                     android:layout_height="match_parent">
                     <com.rengwuxian.materialedittext.MaterialEditText
+                        android:id="@+id/course_spot"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="请输入课名" />
+                        android:hint="请输入上课地点" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"/>
                 </LinearLayout>
             </LinearLayout>
+            <!-- show selected day and time-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -146,15 +151,15 @@
                     android:textColor="#5b9bd5"
                     android:gravity="bottom"/>
                 <TextView
-                    android:id="@+id/dialog_courseNums"
+                    android:id="@+id/tv_courseDT"
                     android:layout_width="0dp"
                     android:layout_weight="5.0"
                     android:layout_height="wrap_content"
                     android:gravity="bottom"
-                    android:hint="请选择上课节数"
                     android:textSize="18dp"
-                    android:textColor="#d8d8d8"/>
+                    android:textColor="#ccc"/>
             </LinearLayout>
+            <!-- get course_weeks -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -192,13 +197,14 @@
         android:orientation="vertical"
         android:gravity="right">
         <com.shamanland.fab.FloatingActionButton
+            android:id="@+id/addCourse_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:layout_marginRight="50dp"
             android:src="@drawable/pic_forsure"
             android:elevation="8dp"
-            app:floatingActionButtonColor="#5b9bd5"
+            app:floatingActionButtonColor="@color/event_color_02"
             app:floatingActionButtonImplicitElevation="false"
             />
     </LinearLayout>

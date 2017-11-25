@@ -109,9 +109,10 @@ public class CourseDao {
     }
 
     private Course addTimeSpot(Cursor c, Course course){
-        int[] day_time_spot = new int[3];
+        int[] day_time_spot;
         ArrayList<int[]> daytimespot = new ArrayList<int[]>();
         while (c.moveToNext()){
+            day_time_spot = new int[3];
             day_time_spot[0] = c.getInt(1);
             day_time_spot[1] = c.getInt(2);
             day_time_spot[2] = c.getInt(3);

@@ -24,6 +24,19 @@ public class TermDao {
         }
     }
 
+    public int addTerm(Term term){
+        db = dbHelper.getWritableDatabase();
+        try{
+            db.execSQL("insert into term(id, describe, startDay, endDay) values(?, ?, ?, ?)",
+                    new String[]{term.getId(), term.getDescribe(), term.getStartDay(), term.getEndDay()});
+        }catch (Exception e){
+            Log.e("fail to addTerm", e.getMessage());
+            return DbHelper.QUERY_FAIL;
+        }
+        db.close();
+        return DbHelper.QUERY_SUCCESS;
+    }
+
     public String getStartDay(String id){
         db = dbHelper.getReadableDatabase();
         String startDay = "'";

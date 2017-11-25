@@ -12,12 +12,26 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.7"
-        android:background="@drawable/border">
+        android:orientation="horizontal"
+        android:background="@drawable/border_bottom">
         <com.gc.materialdesign.views.ButtonRectangle
+            android:id="@+id/btn_getData"
             android:layout_width="180dp"
-            android:layout_height="40dp"
+            android:layout_height="38dp"
             android:background="#59dbe0"
             android:text="导入课程"/>
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:id="@+id/btn_deleteDB"
+            android:layout_width="180dp"
+            android:layout_height="38dp"
+            android:background="#59dbe0"
+            android:text="deleteDb"/>
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:id="@+id/btn_showName"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:text="show">
+        </com.gc.materialdesign.views.ButtonRectangle>
     </LinearLayout>
 
     <!-- show days-->
@@ -26,129 +40,112 @@
         android:layout_height="0dp"
         android:layout_weight="0.7"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@drawable/border_bottom">
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.4"
-            android:layout_height="50dp"
-            android:background="@drawable/border"/>
+            android:layout_height="50dp"/>
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1.0"
             android:layout_height="50dp"
             android:gravity="center"
             android:text="周一"
-            android:textSize="15dp"
-            android:background="@drawable/border"/>
+            android:textSize="15dp"/>
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1.0"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="周一"
-            android:textSize="15dp"
-            android:background="@drawable/border"/>
+            android:text="周二"
+            android:textSize="15dp"/>
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1.0"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="周一"
-            android:textSize="15dp"
-            android:background="@drawable/border"/>
+            android:text="周三"
+            android:textSize="15dp"/>
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1.0"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="周一"
-            android:textSize="15dp"
-            android:background="@drawable/border"/>
+            android:text="周四"
+            android:textSize="15dp"/>
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1.0"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="周一"
-            android:textSize="15dp"
-            android:background="@drawable/border"/>
+            android:text="周五"
+            android:textSize="15dp"/>
     </LinearLayout>
 
     <!-- show course details-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="8.0"
-        android:background="@drawable/border">
+        android:layout_weight="8.0">
         <!-- show courseTime-->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="0.4"
             android:layout_height="match_parent"
-            android:background="@drawable/border"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/border_right">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.0"
-                android:text="1"
-                android:textSize="20dp"
+                android:text="上午一"
+                android:textSize="18dp"
                 android:gravity="center"
-                android:background="@drawable/border"/>
+                android:ems="1"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.0"
-                android:text="1"
+                android:text="上午二"
                 android:textSize="20dp"
-                android:gravity="center"
-                android:background="@drawable/border"/>
+                android:gravity="center"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.0"
-                android:text="1"
+                android:text="下午一"
                 android:textSize="20dp"
-                android:gravity="center"
-                android:background="@drawable/border"/>
+                android:gravity="center"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.0"
-                android:text="1"
+                android:text="下午二"
                 android:textSize="20dp"
-                android:gravity="center"
-                android:background="@drawable/border"/>
+                android:gravity="center"/>
         </LinearLayout>
         <!-- show courses Details-->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="5.0"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@drawable/border">
+            android:orientation="horizontal">
             <!-- Monday-->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1.0"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
+                android:orientation="vertical">
                 <LinearLayout
                     android:id="@+id/Monday_c1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1.0"
-                    android:gravity="center"
                     android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:background="@drawable/border">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textSize="15dp"
-                        android:text="数据结构\n@1204"
-                        android:gravity="center"
-                        android:background="@color/event_color_01"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/Monday_c2"
@@ -173,15 +170,14 @@
                     android:layout_weight="1.0"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:background="@drawable/border"></LinearLayout>
+                    android:background="@drawable/border_right"></LinearLayout>
             </LinearLayout>
             <!-- Tuesday-->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1.0"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
+                android:orientation="vertical">
                 <LinearLayout
                     android:id="@+id/Tuesday_c1"
                     android:layout_width="match_parent"
@@ -190,6 +186,7 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:background="@drawable/border"></LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/Tuesday_c2"
                     android:layout_width="match_parent"
@@ -198,6 +195,7 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:background="@drawable/border"></LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/Tuesday_c3"
                     android:layout_width="match_parent"
@@ -205,14 +203,7 @@
                     android:layout_weight="1.0"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:background="@drawable/border">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:textSize="20dp"
-                        android:text="数据结构"
-                        android:gravity="center"
-                        android:background="@color/event_color_02"/></LinearLayout>
+                    android:background="@drawable/border"></LinearLayout>
                 <LinearLayout
                     android:id="@+id/Tuesday_c4"
                     android:layout_width="match_parent"
@@ -220,15 +211,14 @@
                     android:layout_weight="1.0"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:background="@drawable/border"></LinearLayout>
+                    android:background="@drawable/border_right"></LinearLayout>
             </LinearLayout>
             <!-- Wednesday-->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1.0"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
+                android:orientation="vertical">
                 <LinearLayout
                     android:id="@+id/Wednesday_c1"
                     android:layout_width="match_parent"
@@ -245,6 +235,7 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:background="@drawable/border"></LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/Wednesday_c3"
                     android:layout_width="match_parent"
@@ -253,6 +244,7 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:background="@drawable/border"></LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/Wednesday_c4"
                     android:layout_width="match_parent"
@@ -260,15 +252,14 @@
                     android:layout_weight="1.0"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:background="@drawable/border"></LinearLayout>
+                    android:background="@drawable/border_right"></LinearLayout>
             </LinearLayout>
             <!-- Thursday-->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1.0"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
+                android:orientation="vertical">
                 <LinearLayout
                     android:id="@+id/Thursday_c1"
                     android:layout_width="match_parent"
@@ -285,12 +276,7 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:background="@drawable/border">
-                    <com.gc.materialdesign.views.ButtonFloat
-                        android:id="@+id/buttonFloat"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@color/event_color_01"
-                        android:visibility="invisible"/></LinearLayout>
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/Thursday_c3"
                     android:layout_width="match_parent"
@@ -307,7 +293,7 @@
                     android:layout_weight="1.0"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:background="@drawable/border">
+                    android:background="@drawable/border_right">
                 </LinearLayout>
             </LinearLayout>
             <!-- Friday-->
@@ -315,8 +301,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1.0"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@drawable/border">
+                android:orientation="vertical">
                 <LinearLayout
                     android:id="@+id/Friday_c1"
                     android:layout_width="match_parent"
@@ -347,8 +332,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1.0"
                     android:gravity="center"
-                    android:orientation="vertical"
-                    android:background="@drawable/border"></LinearLayout>
+                    android:orientation="vertical"></LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -357,6 +341,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.4"></LinearLayout>
+        android:layout_weight="0.2"
+        android:background="@color/colorPrimary"></LinearLayout>
 
 </LinearLayout>

@@ -96,7 +96,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }catch (Exception e){
             Log.e("create_table", "term fail\n"+e.getMessage());
         }
-        initData(db);
+        //initData(db);
     }
 
     @Override

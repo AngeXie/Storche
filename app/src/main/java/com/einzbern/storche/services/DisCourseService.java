@@ -5,26 +5,27 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
-import com.alamkanak.weekview.WeekView;
-import com.einzbern.storche.entities.Course;
+import com.einzbern.storche.dao.CourseDao;
+import com.einzbern.storche.entity.Course;
+
+import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2017/11/15.
  */
 
-public class DisCourseService extends Service {
+public class DisCourseService{
+    /*
     private final IBinder iBinder = new LocalBinderDCS();
     public class LocalBinderDCS extends Binder{
         public DisCourseService getService(){
             return DisCourseService.this;
         }
     }
-    private String[][] weekCourses;
     @Override
     public void onCreate(){
-        weekCourses = new String [5][4];
-        initWeekCourses();
     }
 
     @Nullable
@@ -32,19 +33,44 @@ public class DisCourseService extends Service {
     public IBinder onBind(Intent intent) {
         return iBinder;
     }
-
-    private void initWeekCourses(){
-        for (int i=0; i<5; i++){
-            for (int j=0; j<4; j++){
-                weekCourses[i][j] = null;
-            }
-        }
+    */
+    private int curWeek;
+    public DisCourseService(){
+        curWeek = 6;
     }
 
-    public String[][] getWeekCourses(){
-        weekCourses[0][0] = "数据结构\n1204";
-        weekCourses[0][3] = "线性代数\n2205";
-        weekCourses[1][2] = "高等数学\n4306";
+    public String[][] getWeekCourses(CourseDao courseDao){
+        ArrayList<Course>courses = courseDao.getAllCourses();
+        String[][] weekCourses = new String[5][4];
+        weekCourses = initcourseMsg(weekCourses);
+        String course_name = "";
+        int spot, day, time, startWeek, endWeek;
+        String spot_s;
+        Log.e("course_size: ", ""+courses.size());
+        for (int i=0; i<courses.size(); i++){
+            course_name = "@"+courses.get(i).getName();
+            startWeek = courses.get(i).getStartWeek();
+            endWeek = courses.get(i).getEndWeek();
+            //Log.e("course_name: ", i+":"+course_name);
+            if (startWeek<=curWeek && curWeek<=endWeek){
+                for (int j=0; j<courses.get(i).getTime_spot().size(); j++){
+                    day = (courses.get(i).getTime_spot().get(j))[Course.DAY];
+                    time = (courses.get(i).getTime_spot().get(j))[Course.TIME];
+                    spot = (courses.get(i).getTime_spot().get(j))[Course.SPOT];
+                    spot_s = spot==0 ? "体育场地" : ""+spot;
+                    weekCourses[day-1][time] = course_name + "\n"+spot_s;
+                }
+            }
+        }
         return weekCourses;
+    }
+
+    private String[][] initcourseMsg(String[][] courseMsg){
+        for (int i=0; i<courseMsg.length; i++){
+            for (int j=0; j<courseMsg[0].length; j++){
+                courseMsg[i][j] = "";
+            }
+        }
+        return courseMsg;
     }
 }
