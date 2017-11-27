@@ -10,45 +10,44 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.8"
-        android:background="@drawable/border"
+        android:layout_weight="1.2"
         android:orientation="horizontal">
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:background="@drawable/border"/>
+            android:layout_weight="0.96"
+            android:layout_height="match_parent"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="4.0"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="@drawable/border">
+            android:orientation="horizontal">
+
             <TextView
+                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="添加课程"
-                android:textSize="40dp"
-                android:textColor="#5b9bd5"/>
+                android:textColor="#999"
+                android:textSize="40dp" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1.0"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <Button
-                android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/img_add_return_course"
+                android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:text="返回"
-                android:textSize="15dp"
-                android:layout_gravity="center_vertical"/>
+                android:background="@drawable/pic_return"/>
         </LinearLayout>
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1.0"
-            android:layout_height="match_parent"
-            android:background="@drawable/border"/>
+            android:layout_height="match_parent"/>
     </LinearLayout>
 
     <!-- split line-->
@@ -56,26 +55,25 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.01"
-        android:background="@color/event_color_02"></LinearLayout>
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:background="#3f51b5"></LinearLayout>
 
     <!-- input messages -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4.19"
-        android:background="@drawable/border"
         android:orientation="horizontal">
         <TextView
             android:layout_width="0dp"
             android:layout_weight="1.0"
-            android:layout_height="match_parent"
-            android:background="@drawable/border"/>
+            android:layout_height="match_parent"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="5.0"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@drawable/border">
+            android:orientation="vertical">
             <!-- get course_name -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -87,8 +85,8 @@
                     android:layout_weight="1.5"
                     android:layout_height="match_parent"
                     android:text="课名"
-                    android:textSize="22dp"
-                    android:textColor="#5b9bd5"
+                    android:textSize="20dp"
+                    android:textColor="@color/event_color_01"
                     android:gravity="bottom"/>
                 <LinearLayout
                     android:layout_width="0dp"
@@ -96,11 +94,14 @@
                     android:orientation="vertical"
                     android:gravity="bottom"
                     android:layout_height="match_parent">
+
                     <com.rengwuxian.materialedittext.MaterialEditText
                         android:id="@+id/edt_course_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="请输入课名" />
+                        android:hint="请输入课名"
+                        android:textColor="#7b7b7b"/>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"/>
@@ -112,14 +113,17 @@
                 android:layout_height="0dp"
                 android:layout_weight="1.0"
                 android:orientation="horizontal">
+
                 <TextView
+                    android:id="@+id/textView3"
                     android:layout_width="0dp"
-                    android:layout_weight="1.5"
                     android:layout_height="match_parent"
+                    android:layout_weight="1.44"
+                    android:gravity="bottom"
                     android:text="地点"
-                    android:textSize="22dp"
-                    android:textColor="#5b9bd5"
-                    android:gravity="bottom"/>
+                    android:textColor="@color/event_color_02"
+                    android:textSize="20dp" />
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight="5.0"
@@ -130,7 +134,8 @@
                         android:id="@+id/course_spot"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="请输入上课地点" />
+                        android:hint="请输入上课地点"
+                        android:textColor="#7b7b7b"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"/>
@@ -147,8 +152,8 @@
                     android:layout_weight="1.5"
                     android:layout_height="match_parent"
                     android:text="节数"
-                    android:textSize="22dp"
-                    android:textColor="#5b9bd5"
+                    android:textSize="20dp"
+                    android:textColor="@color/event_color_03"
                     android:gravity="bottom"/>
                 <TextView
                     android:id="@+id/tv_courseDT"
@@ -156,8 +161,8 @@
                     android:layout_weight="5.0"
                     android:layout_height="wrap_content"
                     android:gravity="bottom"
-                    android:textSize="18dp"
-                    android:textColor="#ccc"/>
+                    android:textColor="#7b7b7b"
+                    android:background="@drawable/border_bottom"/>
             </LinearLayout>
             <!-- get course_weeks -->
             <LinearLayout
@@ -170,8 +175,8 @@
                     android:layout_weight="1.5"
                     android:layout_height="match_parent"
                     android:text="周数"
-                    android:textSize="22dp"
-                    android:textColor="#5b9bd5"
+                    android:textSize="20dp"
+                    android:textColor="@color/event_color_04"
                     android:gravity="bottom"/>
                 <TextView
                     android:id="@+id/dialog_courseWeeks"
@@ -181,7 +186,8 @@
                     android:gravity="bottom"
                     android:hint="请选择上课周数"
                     android:textSize="18dp"
-                    android:textColor="#d8d8d8"/>
+                    android:textColor="#d8d8d8"
+                    android:background="@drawable/border_bottom"/>
             </LinearLayout>
         </LinearLayout>
         <TextView

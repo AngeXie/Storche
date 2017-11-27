@@ -41,20 +41,20 @@ public class AddWeekDialog extends Dialog {
         private View dialogView;
         private String startWeek;
         private String endWeek;
-        private DialogInterface.OnClickListener positiveListener;
-        private DialogInterface.OnClickListener negativeListener;
+        private OnClickListener positiveListener;
+        private OnClickListener negativeListener;
         private IGetDialogDate getDataListener;
 
         public Builder(Context context){
             this.mContext = context;
         }
 
-        public Builder setPositiveListener(DialogInterface.OnClickListener positiveListener){
+        public Builder setPositiveListener(OnClickListener positiveListener){
             this.positiveListener = positiveListener;
             return this;
         }
 
-        public Builder setNegativeListener(DialogInterface.OnClickListener negativeListener){
+        public Builder setNegativeListener(OnClickListener negativeListener){
             this.negativeListener = negativeListener;
             return this;
         }

@@ -1,6 +1,8 @@
 package com.einzbern.storche;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -12,27 +14,50 @@ import android.widget.TextView;
 import com.einzbern.storche.activities.CoursesActivity;
 import com.einzbern.storche.activities.NoteActivity;
 import com.einzbern.storche.activities.ExamTimeActivity;
+import com.einzbern.storche.dao.ExamDao;
+import com.einzbern.storche.dao.TermDao;
+import com.einzbern.storche.util.CurrentDateUtils;
+import com.einzbern.storche.util.GetweekUtil;
+import com.einzbern.storche.util.StrToDateUtil;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     private MaterialCalendarView calendarView;
     private FloatingActionButton btnGoCourse;
     private FloatingActionButton btnGoNote;
+    private TextView tvExamTime;
+    private TextView tvCurWeek;
     private LinearLayout wigetExam;
+    private TermDao termDao;
+    private ExamDao examDao;
+    private StrToDateUtil strToDateUtil;
     Intent intent;
+    private Date startDate; //开学日期
+    private Date vocationDate;
+    private String examTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        strToDateUtil = new StrToDateUtil();
+        termDao = new TermDao(MainActivity.this);
+        examDao = new ExamDao(MainActivity.this);
         btnGoCourse = (FloatingActionButton)findViewById(R.id.main_btnCourse);
         btnGoNote = (FloatingActionButton)findViewById(R.id.main_btnNote);
         wigetExam = (LinearLayout) findViewById(R.id.main_Exam);
         calendarView = (MaterialCalendarView)findViewById(R.id.materialCalendarView);
+        tvExamTime = (TextView)findViewById(R.id.tv_main_TestTime);
+        tvCurWeek = (TextView)findViewById(R.id.tv_main_curWeek);
         bindListener();
         initView();
     }
@@ -75,8 +100,69 @@ public class MainActivity extends AppCompatActivity {
         calendarView.setSelectedDate(cur);
         calendarView.setTopbarVisible(true);
         CalendarDay curDate = calendarView.getSelectedDate();
-        refreshHeader(curDate.getYear(), curDate.getMonth() + 1, curDate.getDay());
+        initData();
+        initCalenderView();
+        refreshHeader(curDate.getYear(), curDate.getMonth() + 1, curDate.getDay(), new GetweekUtil(startDate).getWeekNum());
+        tvExamTime.setText(examTime);
+
     }
+
+    private  void initData(){
+        String start = termDao.getStartDay("t001");
+        String end = termDao.getEndDay("t001");
+        startDate = strToDateUtil.getDate("2017-09-01");
+        vocationDate = strToDateUtil.getDate("2018-02-20");
+        examTime = "4周"; //getCountdown(examDao.getAllExams().get(0).getDate());
+    }
+
+    private  void initCalenderView(){
+
+        calendarView.addDecorators(new vocationDecorator(), new startDecorator());
+        calendarView.invalidateDecorators();
+
+        calendarView.setOnTitleClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("title", "onClick: " + "已点击");
+                calendarView.setCurrentDate(strToDateUtil.getDate("2018-01-01"));
+                calendarView.setSelectedDate(strToDateUtil.getDate("2018-01-01"));
+            }
+        });
+
+
+
+    }
+
+
+    private class vocationDecorator implements DayViewDecorator{
+
+        @Override
+        public boolean shouldDecorate(CalendarDay day) {
+            Log.i("sssssss", "shouldDecorate: " + day.getDate().toString() + " vacation :" + vocationDate.toString() );
+            return day.getDate().equals(vocationDate);
+        }
+
+        @Override
+        public void decorate(DayViewFacade view) {
+
+            view.setBackgroundDrawable(getResources().getDrawable(R.color.event_color_01));
+        }
+    }
+
+    private class startDecorator implements DayViewDecorator{
+
+        @Override
+        public boolean shouldDecorate(CalendarDay day) {
+            return day.getDate().equals(startDate);
+        }
+
+        @Override
+        public void decorate(DayViewFacade view) {
+            view.setBackgroundDrawable(getResources().getDrawable(R.color.event_color_02));
+        }
+    }
+
+
 
     /**
      * 更新头部文字日期
@@ -84,8 +170,8 @@ public class MainActivity extends AppCompatActivity {
      * @param month
      * @param day
      */
-    private void refreshHeader(int year, int month, int day) {
-        int week = 12;
+    private void refreshHeader(int year, int month, int day, int week) {
+
         TextView tvDay = (TextView)findViewById(R.id.tv_main_curDay);
         TextView tvMonth = (TextView)findViewById(R.id.tv_main_curMonth);
         TextView tvYear = (TextView)findViewById(R.id.tv_main_curYear);
@@ -108,18 +194,30 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    private String getCountdown(String date) {
+        if(date == null){
+            return null;
+        }
+        long days = 0;
+        CurrentDateUtils util = new CurrentDateUtils();
+        String curDate = util.getYear()+"-"+util.getMonth()+"-"+util.getDay();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date begin = format.parse(curDate);
+            Date end = format.parse(date);
+            days = (end.getTime()-begin.getTime())/(24*60*60*1000);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
+        return days + "天";
+    }
 
+    private void jumpDate(){
+        calendarView.goToNext();
     }
 
 
-    /**
-     * Jump to page
-     */
-    private void setGoActivityListner(){
-
-
-
-    }
 }

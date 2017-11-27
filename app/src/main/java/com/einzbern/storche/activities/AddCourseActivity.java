@@ -3,6 +3,7 @@ package com.einzbern.storche.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 public class AddCourseActivity extends AppCompatActivity {
     private TextView tv_courseWeek;
     private TextView tv_courseDT;
+    private ImageView img_return;
     private com.shamanland.fab.FloatingActionButton btn_addC_confirm;
     private MaterialEditText edt_course_spot;
     private MaterialEditText edt_course_name;
@@ -55,6 +58,7 @@ public class AddCourseActivity extends AppCompatActivity {
         courseDao = new CourseDao(this);
         day_time_spots = new ArrayList<int[]>();
         day_time_spot = new int[3];
+        img_return = (ImageView) findViewById(R.id.img_add_return_course);
         tv_courseWeek = (TextView) findViewById(R.id.dialog_courseWeeks);
         tv_courseDT = (TextView) findViewById(R.id.tv_courseDT);
         btn_addC_confirm = (com.shamanland.fab.FloatingActionButton) findViewById(R.id.addCourse_confirm);
@@ -76,10 +80,10 @@ public class AddCourseActivity extends AppCompatActivity {
         btn_addC_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder cNumDialog = new AlertDialog.Builder(AddCourseActivity.this);
-                cNumDialog.setTitle("确认添加");
-                cNumDialog.setMessage("");
-                cNumDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder cConfirmDialog = new AlertDialog.Builder(AddCourseActivity.this);
+                cConfirmDialog.setTitle("确认添加");
+                cConfirmDialog.setMessage("");
+                cConfirmDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         course_name = edt_course_name.getText().toString();
@@ -91,17 +95,21 @@ public class AddCourseActivity extends AppCompatActivity {
                         int re = courseDao.insertCourse(new Course(couse_id, course_name, day_time_spots, startWeek, endWeek, ""));
                         String rs = re== DbHelper.QUERY_SUCCESS ? "添加成功" : "添加失败";
                         Toast.makeText(getApplicationContext(), rs, Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent();
-                        intent.setClass(AddCourseActivity.this, CoursesActivity.class);
-                        startActivity(intent);
+                        returnToCourse();
                     }
                 });
-                cNumDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                cConfirmDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 });
-                cNumDialog.show();
+                cConfirmDialog.show();
+            }
+        });
+        img_return.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                returnToCourse();
             }
         });
     }
@@ -110,8 +118,14 @@ public class AddCourseActivity extends AppCompatActivity {
         intetnDt = intent.getStringExtra("courseDT");
         tv_courseDT.setText(intetnDt);
         tv_courseDT.setTextSize(25);
-        tv_courseDT.setTextColor(Color.parseColor("#666666"));
+        tv_courseDT.setTextColor(Color.parseColor("#999999"));
         getIntentDTMsg(intetnDt);
+    }
+
+    private void returnToCourse(){
+        Intent intent = new Intent();
+        intent.setClass(AddCourseActivity.this, CoursesActivity.class);
+        startActivity(intent);
     }
 
     private void getIntentDTMsg(String intentDt){

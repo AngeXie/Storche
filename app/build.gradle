@@ -21,11 +21,6 @@ android {
 
 repositories {
     jcenter()
-    /*
-    maven {
-        url  "http://dl.bintray.com/lukaville/maven"
-    }
-    */
 }
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -34,13 +29,14 @@ dependencies {
     })
 
     //compile 'com.nbsp:library:1.09'
+    compile 'ru.bartwell:exfilepicker:2.1'
     compile 'com.hynnet:jxl:2.6.12.1'
     compile 'com.ms-square:expandableTextView:0.1.4'
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:cardview-v7:26.+'
     compile 'com.github.navasmdc:MaterialDesign:1.5@aar'
-    compile 'com.github.alamkanak:android-week-view:1.2.6'
+    //compile 'com.github.alamkanak:android-week-view:1.2.6'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'

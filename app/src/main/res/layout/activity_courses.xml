@@ -14,23 +14,55 @@
         android:layout_weight="0.7"
         android:orientation="horizontal"
         android:background="@drawable/border_bottom">
-        <com.gc.materialdesign.views.ButtonRectangle
-            android:id="@+id/btn_getData"
-            android:layout_width="180dp"
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="3"
             android:layout_height="38dp"
-            android:background="#59dbe0"
-            android:text="导入课程"/>
+            android:text="课程表"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2.5"
+            android:layout_height="38dp"
+            android:text="第 12 周"
+            android:textSize="25dp"
+            android:textColor="@color/event_color_04"
+            android:gravity="left"
+            android:layout_gravity="center"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="38dp"
+            android:gravity="center"
+            android:layout_gravity="center">
+            <ImageView
+                android:id="@+id/img_back_to_index"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:background="@drawable/pic_return"/>
+            </LinearLayout>
         <com.gc.materialdesign.views.ButtonRectangle
             android:id="@+id/btn_deleteDB"
-            android:layout_width="180dp"
+            android:layout_width="0dp"
+            android:layout_weight="2"
             android:layout_height="38dp"
             android:background="#59dbe0"
-            android:text="deleteDb"/>
+            android:text="clear"
+            android:gravity="center"
+            android:layout_gravity="center"/>
         <com.gc.materialdesign.views.ButtonRectangle
             android:id="@+id/btn_showName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="2"
             android:layout_height="38dp"
-            android:text="show">
+            android:background="@color/event_color_02"
+            android:text="导入"
+            android:gravity="center"
+            android:layout_gravity="center">
         </com.gc.materialdesign.views.ButtonRectangle>
     </LinearLayout>
 
@@ -170,7 +202,7 @@
                     android:layout_weight="1.0"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:background="@drawable/border_right"></LinearLayout>
+                    android:background="@drawable/border"></LinearLayout>
             </LinearLayout>
             <!-- Tuesday-->
             <LinearLayout
@@ -211,7 +243,7 @@
                     android:layout_weight="1.0"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:background="@drawable/border_right"></LinearLayout>
+                    android:background="@drawable/border"></LinearLayout>
             </LinearLayout>
             <!-- Wednesday-->
             <LinearLayout
@@ -252,7 +284,7 @@
                     android:layout_weight="1.0"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:background="@drawable/border_right"></LinearLayout>
+                    android:background="@drawable/border"></LinearLayout>
             </LinearLayout>
             <!-- Thursday-->
             <LinearLayout
@@ -293,7 +325,7 @@
                     android:layout_weight="1.0"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:background="@drawable/border_right">
+                    android:background="@drawable/border">
                 </LinearLayout>
             </LinearLayout>
             <!-- Friday-->
@@ -332,7 +364,8 @@
                     android:layout_height="0dp"
                     android:layout_weight="1.0"
                     android:gravity="center"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical"
+                    android:background="@drawable/border"></LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

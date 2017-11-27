@@ -1,10 +1,13 @@
 package com.einzbern.storche.activities;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -12,15 +15,21 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.einzbern.storche.MainActivity;
 import com.einzbern.storche.R;
 import com.einzbern.storche.dao.CourseDao;
 import com.einzbern.storche.dao.DbHelper;
@@ -32,10 +41,15 @@ import com.einzbern.storche.util.ColorGetter;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.views.ButtonRectangle;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.Exchanger;
+
+import ru.bartwell.exfilepicker.ExFilePicker;
+import ru.bartwell.exfilepicker.data.ExFilePickerResult;
 
 import static android.view.View.VISIBLE;
 
@@ -58,8 +72,11 @@ public class CoursesActivity extends AppCompatActivity {
     };
     private Intent bindDCSIntent;
     */
+    private static final int EX_FILE_PICKER_RESULT = 0;
+    public static final int PERMISSIONS_REQUEST_CODE = 0;
     DisCourseService disCourseService;
-    ButtonRectangle btn_getData, btn_deleteDb, btn_showName;
+    ButtonRectangle btn_deleteDb, btn_showName;
+    ImageView img_backToIndex;
     DbHelper dbHelper;
     String[][] curWeekCourse;
     TextView[][] courses;
@@ -68,6 +85,7 @@ public class CoursesActivity extends AppCompatActivity {
     ArrayList<TextView> addTextViews;
     ArrayList<String> intentDatas;
     boolean showAdd;
+    String path;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,18 +94,18 @@ public class CoursesActivity extends AppCompatActivity {
         bindDCSIntent = new Intent(this, DisCourseService.class);
         bindService(bindDCSIntent, disCourseCon, Context.BIND_AUTO_CREATE);
         */
+        path = "/sdcard";
         showAdd = false;
         addTextViews = new ArrayList<TextView>();
         intentDatas = new ArrayList<String>();
         disCourseService = new DisCourseService();
-        btn_getData = (ButtonRectangle) findViewById(R.id.btn_getData);
+        img_backToIndex = (ImageView) findViewById(R.id.img_back_to_index);
         btn_deleteDb = (ButtonRectangle) findViewById(R.id.btn_deleteDB);
         btn_showName = (ButtonRectangle) findViewById(R.id.btn_showName);
         dbHelper = new DbHelper(this);
         courses = new TextView[5][4];
         lyCourses = new LinearLayout[5][4];
         curWeekCourse = new String[5][4];
-        //curWeekCourse = disCourseService.getWeekCourses(new CourseDao(this));
 
         initLyCourses();
         clearAllCourseView();
@@ -163,16 +181,12 @@ public class CoursesActivity extends AppCompatActivity {
     }
 
     private void setAddListners(){
-        btn_getData.setOnClickListener(new View.OnClickListener() {
+        img_backToIndex.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    InputDao inputDao = new InputDao(getApplicationContext().getAssets().open("class-scheule.xls"));
-                    inputDao.putDataToDb(getApplicationContext());
-                } catch (IOException e) {
-                    Log.e("fail to open excel", e.getMessage());
-                    e.printStackTrace();
-                }
+                Intent intent = new Intent();
+                intent.setClass(CoursesActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
         btn_deleteDb.setOnClickListener(new View.OnClickListener() {
@@ -186,7 +200,7 @@ public class CoursesActivity extends AppCompatActivity {
         btn_showName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("data", getAllCourseMsg(new CourseDao(getApplicationContext())));
+                checkPermissionsAndOpenFilePicker();
             }
         });
         for (lycourse_i=0; lycourse_i<5; lycourse_i++){
@@ -199,7 +213,6 @@ public class CoursesActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             if (showAdd){
-                                //Log.e("close addTV", "true");
                                 for (int i=0; i<addTextViews.size(); i++){
                                     addTextViews.get(i).setVisibility(View.INVISIBLE);
                                 }
@@ -210,10 +223,32 @@ public class CoursesActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    //Log.e("index", "i: "+lycourse_i+" j: "+lycourse_j);
                 }
             }
         }
+    }
+
+
+    private void checkPermissionsAndOpenFilePicker() {
+        String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                showError();
+            } else {
+                requestPermissions(new String[]{permission}, PERMISSIONS_REQUEST_CODE);
+            }
+        } else {
+            openFilePicker();
+        }
+    }
+
+    private void showError() {
+        Toast.makeText(this, "Allow external storage reading", Toast.LENGTH_SHORT).show();
+    }
+
+    private void openFilePicker(){
+        ExFilePicker exFilePicker = new ExFilePicker();
+        exFilePicker.start(this, EX_FILE_PICKER_RESULT);
     }
 
     private void setLyListener(LinearLayout ly){
@@ -290,5 +325,60 @@ public class CoursesActivity extends AppCompatActivity {
             case R.id.Friday_c4: return "周五 7,8";
         }
         return "Mon-c1";
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == EX_FILE_PICKER_RESULT) {
+            ExFilePickerResult result = ExFilePickerResult.getFromIntent(data);
+            if (result != null && result.getCount() > 0) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 0; i < result.getCount(); i++) {
+                    stringBuilder.append(result.getNames().get(i));
+                    if (i < result.getCount() - 1) stringBuilder.append(", ");
+                }
+                //Log.e("path", "Count: " + result.getCount() + "\n" + "Path: " + result.getPath() + "\n" + "Selected: " + stringBuilder.toString());
+                Log.e("path", getPath(result.getPath(), stringBuilder.toString()));
+                AlertDialog.Builder cConfirmDialog = new AlertDialog.Builder(CoursesActivity.this);
+                cConfirmDialog.setTitle("确认导入课程表信息");
+                cConfirmDialog.setMessage("确认路径:\n"+path);
+                cConfirmDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            InputDao inputDao = new InputDao(new FileInputStream(path));
+                            inputDao.putDataToDb(getApplicationContext());
+                            initLyCourses();
+                            clearAllCourseView();
+                            curWeekCourse = disCourseService.getWeekCourses(new CourseDao(getApplicationContext()));
+                            addAllCourseView();
+                            setAddListners();
+                            String sucsMsg = "课程表已成功导入";
+                            Toast.makeText(getApplicationContext(), sucsMsg, Toast.LENGTH_SHORT).show();
+                        }catch (Exception e){
+                            Log.e("fail to open excel", e.getMessage());
+                            String fialMsg = "导入失败";
+                            Toast.makeText(getApplicationContext(), fialMsg, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                cConfirmDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String cancleMsg = "已取消导入";
+                        Toast.makeText(getApplicationContext(), cancleMsg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                cConfirmDialog.show();
+            }
+        }
+    }
+
+    private String getPath(String dir, String fileName){
+        String[] dir_pars = dir.split("/");
+        for (int i=4; i<dir_pars.length; i++)
+            path += "/"+dir_pars[i];
+        path += "/"+fileName;
+        return path;
     }
 }

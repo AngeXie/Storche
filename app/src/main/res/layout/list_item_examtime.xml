@@ -52,19 +52,27 @@
                     android:layout_gravity="center_vertical"
                     android:text=""
                     android:textSize="20dp" />
+                <TextView
+                    android:id="@+id/exam_tvExamId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text=""
+                    android:textSize="0dp" />
             </LinearLayout>
 
-            <!--time-->
+            <!--Countdown-->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:gravity="center">
                 <TextView
-                    android:id="@+id/exam_tvExamTime"
+                    android:id="@+id/exam_tvCountDown"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="" />
+
             </LinearLayout>
         </LinearLayout>
 

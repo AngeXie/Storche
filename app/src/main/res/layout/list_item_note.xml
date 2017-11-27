@@ -7,7 +7,8 @@
     android:background="@drawable/border_top"
     android:paddingBottom="20dp"
     android:paddingTop="20dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:descendantFocusability="blocksDescendants" >
     <!--sign and Title-->
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,8 +59,11 @@
                 android:id="@+id/note_tvexpand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="false"
+                android:longClickable="true"
                 expandableTextView:animDuration="200"
-                expandableTextView:maxCollapsedLines="1">
+                expandableTextView:maxCollapsedLines="1"
+                android:scrollbars="none" >
 
                 <TextView
                     android:id="@id/expandable_text"

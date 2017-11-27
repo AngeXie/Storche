@@ -45,12 +45,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="right">
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="56dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center_vertical"
-                    android:text="返回" />
+                <!-- <Button
+                     android:id="@+id/button"
+                     android:layout_width="56dp"
+                     android:layout_height="35dp"
+                     android:layout_gravity="center_vertical"
+                     android:text="返回" />-->
             </LinearLayout>
         </LinearLayout>
 
@@ -75,7 +75,8 @@
                     <ListView
                         android:id="@+id/Exam_listExam"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:scrollbars="none">
 
                     </ListView>
                 </LinearLayout>
@@ -84,6 +85,7 @@
 
                 <!--floate Button-->
                 <com.shamanland.fab.FloatingActionButton
+                    android:id="@+id/exam_fabAdd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
