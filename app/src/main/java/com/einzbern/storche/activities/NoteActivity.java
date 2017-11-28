@@ -15,10 +15,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.einzbern.storche.R;
 import com.einzbern.storche.adptater.NoteAdptater;
 import com.einzbern.storche.dao.DayMsgDao;
+import com.einzbern.storche.dao.DbHelper;
 import com.einzbern.storche.entity.DayMsg;
 import com.einzbern.storche.entity.Exam;
 import com.einzbern.storche.util.CurrentDateUtils;
@@ -53,6 +55,8 @@ public class NoteActivity extends AppCompatActivity {
     //dialog
     protected View dialogView;
     protected AddNoteDialog noteDialog;
+    private boolean addNoteResult;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -70,6 +74,7 @@ public class NoteActivity extends AppCompatActivity {
         mapNote = new HashMap<>();
         noteEntity = new DayMsg();
         itemkey = new ArrayList<>();
+        addNoteResult = false;
         initView();
     }
 
@@ -98,7 +103,9 @@ public class NoteActivity extends AppCompatActivity {
                 .setPositiveListener(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                       dissmissNoteDialog();
+                        if(addNoteResult) {
+                            dissmissNoteDialog();
+                        }
                     }
                 })
                 .setNegativeListener(new DialogInterface.OnClickListener() {
@@ -110,10 +117,17 @@ public class NoteActivity extends AppCompatActivity {
                 .setIGetDataListener(new AddNoteDialog.IGetDialogData() {
                     @Override
                     public void getDate(String title, String content) {
-                        noteEntity.setId(title);
-                        noteEntity.setTitle(title);
-                        noteEntity.setDetail(content);
-                        addOneItem();
+                        String hint1 = "";
+                        String hint2 = "";
+                        if (checkTitle(title)) {
+                            noteEntity.setId(title);
+                            noteEntity.setTitle(title);
+                            noteEntity.setDetail(content);
+                            hint2 = addOneItem();
+                        }else {
+                            hint1 = "标题不能为空";
+                        }
+                        Toast.makeText(getApplicationContext(), hint1 + hint2, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .Build();
@@ -195,12 +209,22 @@ public class NoteActivity extends AppCompatActivity {
         noteLAdapter.notifyDataSetChanged();
     }
 
-    private void addOneItem(){
-        Log.i("entity", "addOneItem: " + noteEntity.getId() + "*" + noteEntity.getTitle() + "*" + noteEntity.getDetail());
-        noteDao.addDayMsg(noteEntity);
-        noteList.clear();
-        setadapterList();
-        noteLAdapter.notifyDataSetChanged();
+    private String addOneItem(){
+        String hint = "不可以添加重复的标题";
+        if((addNoteResult = checkAddResult())) {
+            noteList.clear();
+            setadapterList();
+            noteLAdapter.notifyDataSetChanged();
+            hint = "已添加一条记事";
+        }
+        return hint;
     }
 
+    private boolean checkTitle(String title){
+        return !(title.length()==0);
+    }
+
+    private boolean checkAddResult(){
+        return noteDao.addDayMsg(noteEntity)== DbHelper.QUERY_SUCCESS;
+    }
 }

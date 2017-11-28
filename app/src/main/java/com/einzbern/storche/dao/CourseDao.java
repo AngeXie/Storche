@@ -26,6 +26,20 @@ public class CourseDao {
         }
     }
 
+    public int clearData(){
+        db = dbHelper.getWritableDatabase();
+        try {
+            db.execSQL("delete from course");
+            db.execSQL("delete from course_ts");
+        }catch (Exception e){
+            Log.e("fail to clear c_data", e.getMessage());
+            dispose();
+            return DbHelper.QUERY_FAIL;
+        }
+        dispose();
+        return DbHelper.QUERY_SUCCESS;
+    }
+
     public int getCoursesNum(){
         db = getRDb();
         int num = 0;

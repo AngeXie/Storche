@@ -16,6 +16,7 @@ import com.einzbern.storche.activities.NoteActivity;
 import com.einzbern.storche.activities.ExamTimeActivity;
 import com.einzbern.storche.dao.ExamDao;
 import com.einzbern.storche.dao.TermDao;
+import com.einzbern.storche.entity.Exam;
 import com.einzbern.storche.util.CurrentDateUtils;
 import com.einzbern.storche.util.GetweekUtil;
 import com.einzbern.storche.util.StrToDateUtil;
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private Date startDate; //开学日期
     private Date vocationDate;
     private String examTime;
+    private String termWeek;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +65,7 @@ public class MainActivity extends AppCompatActivity {
         initView();
     }
 
-
     private void bindListener(){
-        onDateChanged();
         btnGoCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,67 +103,53 @@ public class MainActivity extends AppCompatActivity {
         CalendarDay curDate = calendarView.getSelectedDate();
         initData();
         initCalenderView();
-        refreshHeader(curDate.getYear(), curDate.getMonth() + 1, curDate.getDay(), new GetweekUtil(startDate).getWeekNum());
-        tvExamTime.setText(examTime);
-
+        if(checkSqlNotNull()){
+            termWeek ="第" + new GetweekUtil(startDate).getWeekNum() + "周";
+        }else {
+            termWeek = "";
+        }
+        refreshHeader(curDate.getYear(), curDate.getMonth() + 1, curDate.getDay(), termWeek);
+        initExam();
     }
 
     private  void initData(){
-        String start = termDao.getStartDay("t001");
-        String end = termDao.getEndDay("t001");
-        startDate = strToDateUtil.getDate("2017-09-01");
-        vocationDate = strToDateUtil.getDate("2018-02-20");
-        examTime = "4周"; //getCountdown(examDao.getAllExams().get(0).getDate());
+        String start;
+        String end;
+        if(checkSqlNotNull()) {
+            start = termDao.getStartDay();
+            end = termDao.getEndDay();
+            startDate = strToDateUtil.getDate(start);
+            vocationDate = strToDateUtil.getDate(end);
+
+        }
+    }
+
+    private void initExam() {
+        TextView des1 = (TextView)findViewById(R.id.tv_main_examdis1);
+        TextView des2 = (TextView)findViewById(R.id.tv_main_examdis2);
+        TextView tvExamName = (TextView)findViewById(R.id.tv_main_textName);
+        if(checkExamNotNull()) {
+            Exam examEntity = examDao.getAllExams().get(0);
+            examTime = getCountdown(examEntity.getDate());
+
+            tvExamName.setText(examEntity.getName());
+            des1.setText("距离");
+            des2.setText("还有");
+            tvExamTime.setText(examTime);
+        }else {
+            tvExamName.setText("");
+            tvExamTime.setText("");
+            des1.setText("");
+            des2.setText("最近没有考试哦");
+        }
     }
 
     private  void initCalenderView(){
-
-        calendarView.addDecorators(new vocationDecorator(), new startDecorator());
-        calendarView.invalidateDecorators();
-
-        calendarView.setOnTitleClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("title", "onClick: " + "已点击");
-                calendarView.setCurrentDate(strToDateUtil.getDate("2018-01-01"));
-                calendarView.setSelectedDate(strToDateUtil.getDate("2018-01-01"));
-            }
-        });
-
-
-
-    }
-
-
-    private class vocationDecorator implements DayViewDecorator{
-
-        @Override
-        public boolean shouldDecorate(CalendarDay day) {
-            Log.i("sssssss", "shouldDecorate: " + day.getDate().toString() + " vacation :" + vocationDate.toString() );
-            return day.getDate().equals(vocationDate);
-        }
-
-        @Override
-        public void decorate(DayViewFacade view) {
-
-            view.setBackgroundDrawable(getResources().getDrawable(R.color.event_color_01));
+        if(checkSqlNotNull()) {
+            calendarView.addDecorators(new vocationDecorator(), new startDecorator());
+            calendarView.invalidateDecorators();
         }
     }
-
-    private class startDecorator implements DayViewDecorator{
-
-        @Override
-        public boolean shouldDecorate(CalendarDay day) {
-            return day.getDate().equals(startDate);
-        }
-
-        @Override
-        public void decorate(DayViewFacade view) {
-            view.setBackgroundDrawable(getResources().getDrawable(R.color.event_color_02));
-        }
-    }
-
-
 
     /**
      * 更新头部文字日期
@@ -170,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
      * @param month
      * @param day
      */
-    private void refreshHeader(int year, int month, int day, int week) {
+    private void refreshHeader(int year, int month, int day, String week) {
 
         TextView tvDay = (TextView)findViewById(R.id.tv_main_curDay);
         TextView tvMonth = (TextView)findViewById(R.id.tv_main_curMonth);
@@ -179,22 +166,9 @@ public class MainActivity extends AppCompatActivity {
         tvDay.setText("月" + day + "日");
         tvMonth.setText("" + month);
         tvYear.setText(""+ year);
-        tvWeek.setText("第" + week + "周");
+        tvWeek.setText(week);
     }
 
-    /**
-     * when Calender is clicked
-     */
-    private void onDateChanged() {
-        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                if(selected){
-                    //refreshHeader(date.getYear(), date.getMonth()+1, date.getDay());//+1因为框架有Bug
-                }
-            }
-        });
-    }
 
     private String getCountdown(String date) {
         if(date == null){
@@ -215,9 +189,54 @@ public class MainActivity extends AppCompatActivity {
         return days + "天";
     }
 
-    private void jumpDate(){
-        calendarView.goToNext();
+    private Boolean checkSqlNotNull(){
+        if(termDao.getEndDay() != null && termDao.getStartDay() != null){
+            return true;
+        }
+        return false;
     }
 
+    private class vocationDecorator implements DayViewDecorator{
 
+        @Override
+        public boolean shouldDecorate(CalendarDay day) {
+            // Log.i("sssssss", "shouldDecorate: " + day.getDate().toString() + " vacation :" + vocationDate.toString() );
+            return day.getDate().equals(vocationDate);
+        }
+
+        @Override
+        public void decorate(DayViewFacade view) {
+
+            view.setBackgroundDrawable(getResources().getDrawable(R.drawable.pic_vacation));
+        }
+    }
+
+    private class startDecorator implements DayViewDecorator{
+
+        @Override
+        public boolean shouldDecorate(CalendarDay day) {
+            return day.getDate().equals(startDate);
+        }
+
+        @Override
+        public void decorate(DayViewFacade view) {
+            view.setBackgroundDrawable(getResources().getDrawable(R.drawable.pic_start));
+        }
+    }
+
+    private boolean checkExamNotNull(){
+        // Log.i("nullll", "checkExamNotNull: " + examDao.getAllExams().size());
+        if(examDao.getAllExams().size() != 0){
+            return true;
+        }
+        else return false;
+    }
+
+    @Override
+    public void onResume(){
+        initView();
+        super.onResume();
+        // Log.i("backto", "onResume: " + "返回");
+
+    }
 }

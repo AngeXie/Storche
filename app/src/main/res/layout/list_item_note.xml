@@ -19,12 +19,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="top"
             >
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@color/accent" />
+                android:src="@drawable/note_sign" />
 
         </LinearLayout>
         <!--Title-->
@@ -37,6 +38,7 @@
                 android:id="@+id/note_tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="20dp"
                 android:text="" />
         </LinearLayout>
     </LinearLayout>

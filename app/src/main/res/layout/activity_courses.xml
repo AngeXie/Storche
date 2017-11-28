@@ -14,26 +14,9 @@
         android:layout_weight="0.7"
         android:orientation="horizontal"
         android:background="@drawable/border_bottom">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_height="38dp"
-            android:text="课程表"
-            android:textSize="18dp"
-            android:gravity="center"
-            android:layout_gravity="center"/>
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="2.5"
-            android:layout_height="38dp"
-            android:text="第 12 周"
-            android:textSize="25dp"
-            android:textColor="@color/event_color_04"
-            android:gravity="left"
-            android:layout_gravity="center"/>
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1.5"
+            android:layout_weight="2"
             android:layout_height="38dp"
             android:gravity="center"
             android:layout_gravity="center">
@@ -44,9 +27,18 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:background="@drawable/pic_return"/>
-            </LinearLayout>
+        </LinearLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2.5"
+            android:layout_height="38dp"
+            android:text="第 12 周"
+            android:textSize="25dp"
+            android:textColor="@color/event_color_04"
+            android:gravity="left"
+            android:layout_gravity="center"/>
         <com.gc.materialdesign.views.ButtonRectangle
-            android:id="@+id/btn_deleteDB"
+            android:id="@+id/btn_delete_data_course_term"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="38dp"
@@ -55,7 +47,7 @@
             android:gravity="center"
             android:layout_gravity="center"/>
         <com.gc.materialdesign.views.ButtonRectangle
-            android:id="@+id/btn_showName"
+            android:id="@+id/btn_inputFromExcel"
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="38dp"

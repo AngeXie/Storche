@@ -17,6 +17,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.einzbern.storche.R;
+import com.einzbern.storche.dao.DbHelper;
 import com.einzbern.storche.dao.ExamDao;
 import com.einzbern.storche.entity.Exam;
 import com.einzbern.storche.util.CurrentDateUtils;
@@ -37,7 +38,7 @@ public class ExamTimeActivity extends AppCompatActivity{
     protected ListView lvExam;
     protected ExamDao examDao;//数据库
     protected List <Exam>ltentityExam;
-    protected static Exam examEntity;
+    protected Exam examEntity;
     protected SimpleAdapter adpExam;
     protected List ltExam;
     protected Map mapExam;
@@ -53,6 +54,9 @@ public class ExamTimeActivity extends AppCompatActivity{
     private List ltDay;
     private List ltHour;
     private List ltMin;
+    private String getName;
+    private String getDate;
+    private boolean addSqlResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,7 @@ public class ExamTimeActivity extends AppCompatActivity{
         ltDay = new ArrayList<>();
         ltHour = new ArrayList<>();
         ltMin = new ArrayList<>();
+        getName = null;
         initView();
     }
 
@@ -103,7 +108,7 @@ public class ExamTimeActivity extends AppCompatActivity{
                 new AlertDialog.Builder(ExamTimeActivity.this).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                       dialog.dismiss();
+                        dialog.dismiss();
                         deleteFromLvSQL((String) mapExam.get(itemName[4]));
                     }
                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -147,8 +152,8 @@ public class ExamTimeActivity extends AppCompatActivity{
         initTimeList(ltYear,year,2030);
         initTimeList(ltMonth, 1, 12);
         initTimeList(ltDay, 1, 31);
-        initTimeList(ltHour, 1, 24);
-        initTimeList(ltMin, 1, 60);
+        initTimeList(ltHour, 0, 23);
+        initTimeList(ltMin, 0, 60);
         addExamDialog = new AddExamDialog.Builder(ExamTimeActivity.this)
                 .setDialogView(dialogView)
                 .setltYear(ltYear)
@@ -161,8 +166,10 @@ public class ExamTimeActivity extends AppCompatActivity{
                 .setPositiveListener(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(checkTime(examEntity.getDate())) {
-                            dissmissDialog();
+                        if(displayNameNullHint(getName) && checkTime(getDate)) {
+                            if(addSqlResult) {
+                                dissmissDialog();
+                            }
                         }
                     }
                 }).setNegativeListener(new DialogInterface.OnClickListener() {
@@ -175,16 +182,43 @@ public class ExamTimeActivity extends AppCompatActivity{
 
                     @Override
                     public void getData(String title, String date, String startTime, String endTime) {
-                        examEntity.setId(title);
-                        examEntity.setName(title);
-                        examEntity.setDate(date);
-                        examEntity.setStartTime(startTime);
-                        examEntity.setEndTime(endTime);
-                        if(checkTime(date)){
-                            addToLvSQL();
-                        }else {
-                            Toast.makeText(getApplicationContext(), "选择的时间不正确", Toast.LENGTH_SHORT).show();
+                        Log.i("ggggg", "getData: *"+(endTime)+"**");
+                        if(date.length() == 0){
+                            date = "2017-01-01";
                         }
+
+                        if(endTime.length() == 0){
+                            endTime = "00:00";
+                        }
+
+                        if(startTime.length() == 0){
+                            startTime = "00:00";
+                        }
+
+                        getName = title;
+                        getDate = date;
+                        String hint1 = "";
+                        String hint2 = "";
+                        String hint3 = "";
+                        if(displayNameNullHint(title) &&checkTime(date)){
+                            examEntity.setId(title);
+                            examEntity.setName(title);
+                            examEntity.setDate(date);
+                            examEntity.setStartTime(startTime);
+                            examEntity.setEndTime(endTime);
+                            hint3 = addToLvSQL();
+                        }else {
+                            if(!displayNameNullHint(title)){
+
+                                hint2 = "名字不能为空";
+                            }
+                            if(!checkTime(date)){
+                                hint1 = "选择的时间不正确";
+                            }
+                        }
+                        Log.i("result", "getData: " + addSqlResult);
+                        Toast.makeText(getApplicationContext(), hint1 + hint2 + hint3, Toast.LENGTH_SHORT).show();
+
 
                     }
                 })
@@ -193,13 +227,20 @@ public class ExamTimeActivity extends AppCompatActivity{
 
     }
 
-    private void addToLvSQL() {
-        //Log.i("examEntity", "addToLvSQL: " + examEntity.getName() +"\tDate"+ examEntity.getDate());
-        examDao.addExam(examEntity);
-        //更新Adapter
-        ltExam.clear();
-        initAdpList();
-        adpExam.notifyDataSetChanged();
+    private String addToLvSQL() {
+        String hint = "考试名字不可以重复";
+        if(checkAdd()) {
+
+            //更新Adapter
+            ltExam.clear();
+            initAdpList();
+            adpExam.notifyDataSetChanged();
+            hint = "添加成功";
+            addSqlResult = true;
+        }else {
+            addSqlResult = false;
+        }
+        return hint;
     }
 
     private void deleteFromLvSQL(String id){
@@ -264,8 +305,16 @@ public class ExamTimeActivity extends AppCompatActivity{
     }
 
     private Boolean checkTime(String date){
-Log.i("date", "checkTime: " +date);
+        Log.i("date", "checkTime: " +date);
         return !getCountdown(date).contains("-");
+    }
+
+    private boolean displayNameNullHint(String name){
+        return name.length() != 0;
+
+    }
+    private boolean checkAdd(){
+        return examDao.addExam(examEntity) == DbHelper.QUERY_SUCCESS;
     }
 }
 

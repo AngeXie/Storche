@@ -24,7 +24,7 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:background="@color/accent" />
+                android:src="@drawable/countdown_sign"/>
         </LinearLayout>
     </LinearLayout>
 

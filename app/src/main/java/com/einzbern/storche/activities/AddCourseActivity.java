@@ -26,6 +26,8 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
  * Created by Administrator on 2017/11/17.
@@ -80,30 +82,35 @@ public class AddCourseActivity extends AppCompatActivity {
         btn_addC_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder cConfirmDialog = new AlertDialog.Builder(AddCourseActivity.this);
-                cConfirmDialog.setTitle("确认添加");
-                cConfirmDialog.setMessage("");
-                cConfirmDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        course_name = edt_course_name.getText().toString();
-                        day_time_spot[Course.SPOT] = Integer.parseInt(edt_course_spot.getText().toString());
-                        day_time_spots.add(day_time_spot);
-                        couse_id = course_name;
-                        startWeek = Integer.parseInt(s_startWeek);
-                        endWeek = Integer.parseInt(s_endWeek);
-                        int re = courseDao.insertCourse(new Course(couse_id, course_name, day_time_spots, startWeek, endWeek, ""));
-                        String rs = re== DbHelper.QUERY_SUCCESS ? "添加成功" : "添加失败";
-                        Toast.makeText(getApplicationContext(), rs, Toast.LENGTH_SHORT).show();
-                        returnToCourse();
-                    }
-                });
-                cConfirmDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                cConfirmDialog.show();
+                if (checkAddMsgIsLegal(edt_course_name.getText().toString(), edt_course_spot.getText().toString(), s_startWeek, s_endWeek)){
+                    course_name = edt_course_name.getText().toString();
+                    couse_id = course_name;
+                    startWeek = Integer.parseInt(s_startWeek);
+                    endWeek = Integer.parseInt(s_endWeek);
+                    day_time_spot[Course.SPOT] = Integer.parseInt(edt_course_spot.getText().toString());
+                    day_time_spots.add(day_time_spot);
+                    AlertDialog.Builder cConfirmDialog = new AlertDialog.Builder(AddCourseActivity.this);
+                    cConfirmDialog.setTitle("");
+                    cConfirmDialog.setMessage("确认添加课程： "+course_name);
+                    cConfirmDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            int re = courseDao.insertCourse(new Course(couse_id, course_name, day_time_spots, startWeek, endWeek, ""));
+                            String rs = re== DbHelper.QUERY_SUCCESS ? "添加成功" : "添加失败";
+                            Toast.makeText(getApplicationContext(), rs, Toast.LENGTH_SHORT).show();
+                            returnToCourse();
+                        }
+                    });
+                    cConfirmDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    cConfirmDialog.show();
+                }else {
+                    String st = "请检查输入内容！";
+                    Toast.makeText(getApplicationContext(), st, Toast.LENGTH_SHORT).show();
+                }
             }
         });
         img_return.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +119,24 @@ public class AddCourseActivity extends AppCompatActivity {
                 returnToCourse();
             }
         });
+    }
+
+    private boolean checkAddMsgIsLegal(Object c_name, Object inputSpot, Object start_w, Object end_w){
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        if (c_name != null && !c_name.equals(""))
+            if (inputSpot != null && !inputSpot.equals("") && pattern.matcher(inputSpot.toString()).matches()) {
+                if (start_w != null && end_w != null) {
+                    if (Integer.parseInt(start_w.toString()) <= Integer.parseInt(end_w.toString())) {
+                        //Log.e("islegal:", "legal");
+                        return true;
+                    }else {
+                        tv_courseWeek.setText("请选择合法的周数！");
+                    }
+                }
+            }
+        //Log.e("isLagal", "inlegal");
+        //og.e("start-end", s_startWeek+"-"+s_endWeek);
+        return false;
     }
 
     private void showCourseDT(Intent intent){
@@ -147,7 +172,6 @@ public class AddCourseActivity extends AppCompatActivity {
         }
         day_time_spot[Course.DAY] = day;
         day_time_spot[Course.TIME] = time;
-        Log.e("DT", "day-"+day+" time-"+time);
     }
 
     private void getALlMsg(){

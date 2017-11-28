@@ -36,6 +36,7 @@ public class ExamDao {
             cursor.close();
         }catch (Exception e){
             Log.e("fail to get exam number", e.getMessage());
+            return 0;
         }
         db.close();
         return number;
@@ -54,6 +55,7 @@ public class ExamDao {
             cursor.close();
         }catch (Exception e){
             Log.e("fail to getAllExams", e.getMessage());
+            return null;
         }
         dispose();
         return exams;

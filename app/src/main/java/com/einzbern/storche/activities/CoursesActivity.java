@@ -34,12 +34,15 @@ import com.einzbern.storche.R;
 import com.einzbern.storche.dao.CourseDao;
 import com.einzbern.storche.dao.DbHelper;
 import com.einzbern.storche.dao.InputDao;
+import com.einzbern.storche.dao.TermDao;
 import com.einzbern.storche.entity.Course;
+import com.einzbern.storche.entity.Term;
 import com.einzbern.storche.entity.Week;
 import com.einzbern.storche.services.DisCourseService;
 import com.einzbern.storche.util.ColorGetter;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.views.ButtonRectangle;
+import com.githang.statusbar.StatusBarCompat;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -75,7 +78,7 @@ public class CoursesActivity extends AppCompatActivity {
     private static final int EX_FILE_PICKER_RESULT = 0;
     public static final int PERMISSIONS_REQUEST_CODE = 0;
     DisCourseService disCourseService;
-    ButtonRectangle btn_deleteDb, btn_showName;
+    ButtonRectangle btn_clearData, btn_inputData;
     ImageView img_backToIndex;
     DbHelper dbHelper;
     String[][] curWeekCourse;
@@ -100,13 +103,17 @@ public class CoursesActivity extends AppCompatActivity {
         intentDatas = new ArrayList<String>();
         disCourseService = new DisCourseService();
         img_backToIndex = (ImageView) findViewById(R.id.img_back_to_index);
-        btn_deleteDb = (ButtonRectangle) findViewById(R.id.btn_deleteDB);
-        btn_showName = (ButtonRectangle) findViewById(R.id.btn_showName);
+        btn_clearData = (ButtonRectangle) findViewById(R.id.btn_delete_data_course_term);
+        btn_inputData = (ButtonRectangle) findViewById(R.id.btn_inputFromExcel);
         dbHelper = new DbHelper(this);
         courses = new TextView[5][4];
         lyCourses = new LinearLayout[5][4];
         curWeekCourse = new String[5][4];
 
+        refreshActivity();
+    }
+
+    private void refreshActivity(){
         initLyCourses();
         clearAllCourseView();
         curWeekCourse = disCourseService.getWeekCourses(new CourseDao(getApplicationContext()));
@@ -189,18 +196,45 @@ public class CoursesActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        btn_deleteDb.setOnClickListener(new View.OnClickListener() {
+        btn_clearData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 boolean re = (getApplicationContext()).deleteDatabase(dbHelper.DATABASE_NAME);
                 String s = re?"suceess":"fail";
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                */
+                AlertDialog.Builder cConfirmDialog = new AlertDialog.Builder(CoursesActivity.this);
+                cConfirmDialog.setTitle("");
+                cConfirmDialog.setMessage("确认清除课程表和学期的所有信息吗？");
+                cConfirmDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        CourseDao courseDao = new CourseDao(getApplicationContext());
+                        TermDao termDao = new TermDao(getApplicationContext());
+                        courseDao.clearData();
+                        termDao.clearData();
+                        refreshActivity();
+                    }
+                });
+                cConfirmDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                cConfirmDialog.show();
             }
         });
-        btn_showName.setOnClickListener(new View.OnClickListener() {
+        btn_inputData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkPermissionsAndOpenFilePicker();
+                if ((new CourseDao(getApplicationContext())).getCoursesNum() == 0) {
+                    if ((new TermDao(getApplicationContext())).getStartDay() == null)
+                        checkPermissionsAndOpenFilePicker();
+                }else {
+                    String s0 = "检测到已有课程表和学期信息，请先清除已有信息再进行导入操作";
+                    Toast.makeText(getApplicationContext(), s0, Toast.LENGTH_LONG).show();
+                }
             }
         });
         for (lycourse_i=0; lycourse_i<5; lycourse_i++){
@@ -227,7 +261,6 @@ public class CoursesActivity extends AppCompatActivity {
             }
         }
     }
-
 
     private void checkPermissionsAndOpenFilePicker() {
         String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -275,6 +308,7 @@ public class CoursesActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /*
     private String getAllCourseMsg(CourseDao courseDao){
         ArrayList<Course> courses = courseDao.getAllCourses();
         String result = "";
@@ -300,6 +334,7 @@ public class CoursesActivity extends AppCompatActivity {
         }
         return s;
     }
+    */
 
     private String idToStirng(int id){
         switch (id){
@@ -307,7 +342,7 @@ public class CoursesActivity extends AppCompatActivity {
             case R.id.Monday_c2: return "周一 3,4";
             case R.id.Monday_c3: return "周一 5,6";
             case R.id.Monday_c4: return "周一 7,8";
-            case R.id.Tuesday_c1: return "周二-1,2";
+            case R.id.Tuesday_c1: return "周二 1,2";
             case R.id.Tuesday_c2: return "周二 3,4";
             case R.id.Tuesday_c3: return "周二 5,6";
             case R.id.Tuesday_c4: return "周二 7,8";
@@ -340,7 +375,7 @@ public class CoursesActivity extends AppCompatActivity {
                 //Log.e("path", "Count: " + result.getCount() + "\n" + "Path: " + result.getPath() + "\n" + "Selected: " + stringBuilder.toString());
                 Log.e("path", getPath(result.getPath(), stringBuilder.toString()));
                 AlertDialog.Builder cConfirmDialog = new AlertDialog.Builder(CoursesActivity.this);
-                cConfirmDialog.setTitle("确认导入课程表信息");
+                cConfirmDialog.setTitle("");
                 cConfirmDialog.setMessage("确认路径:\n"+path);
                 cConfirmDialog.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
@@ -348,11 +383,7 @@ public class CoursesActivity extends AppCompatActivity {
                         try {
                             InputDao inputDao = new InputDao(new FileInputStream(path));
                             inputDao.putDataToDb(getApplicationContext());
-                            initLyCourses();
-                            clearAllCourseView();
-                            curWeekCourse = disCourseService.getWeekCourses(new CourseDao(getApplicationContext()));
-                            addAllCourseView();
-                            setAddListners();
+                            refreshActivity();
                             String sucsMsg = "课程表已成功导入";
                             Toast.makeText(getApplicationContext(), sucsMsg, Toast.LENGTH_SHORT).show();
                         }catch (Exception e){
@@ -376,6 +407,7 @@ public class CoursesActivity extends AppCompatActivity {
 
     private String getPath(String dir, String fileName){
         String[] dir_pars = dir.split("/");
+        path = "/sdcard";
         for (int i=4; i<dir_pars.length; i++)
             path += "/"+dir_pars[i];
         path += "/"+fileName;

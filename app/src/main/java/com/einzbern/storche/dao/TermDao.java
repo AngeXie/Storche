@@ -37,34 +37,55 @@ public class TermDao {
         return DbHelper.QUERY_SUCCESS;
     }
 
-    public String getStartDay(String id){
-        db = dbHelper.getReadableDatabase();
-        String startDay = "'";
+    public int clearData(){
+        db = dbHelper.getWritableDatabase();
         try {
-            Cursor cursor = db.rawQuery("select startDay from term where id=?", new String[]{id});
+            db.execSQL("delete from term");
+        }catch (Exception e){
+            Log.e("fail to clear term data", e.getMessage());
+            db.close();
+            return DbHelper.QUERY_FAIL;
+        }
+        db.close();
+        return DbHelper.QUERY_SUCCESS;
+    }
+
+    public String getStartDay(){
+        db = dbHelper.getReadableDatabase();
+        String startDay = null;
+        try {
+            Cursor cursor = db.rawQuery("select startDay from term", null);
             if (cursor.moveToNext())
-                startDay = cursor.getString(0);
+                startDay = formatS(cursor.getString(0));
             cursor.close();
         }catch (Exception e){
+            db.close();
             Log.e("fail to find term_start", e.getMessage());
+            return null;
         }
         db.close();
         return startDay;
     }
 
-    public String getEndDay(String id){
+    public String getEndDay(){
         db = dbHelper.getReadableDatabase();
-        String endDay = "'";
+        String endDay = null;
         try {
-            Cursor cursor = db.rawQuery("select endDay from term where id=?", new String[]{id});
+            Cursor cursor = db.rawQuery("select endDay from term", null);
             if (cursor.moveToNext())
-                endDay = cursor.getString(0);
+                endDay = formatS(cursor.getString(0));
             cursor.close();
         }catch (Exception e){
+            db.close();
             Log.e("fail to find term_end", e.getMessage());
+            return null;
         }
         db.close();
         return endDay;
+    }
+
+    private String formatS(String s){
+        return s.split("：")[s.split("：").length-1];
     }
 
     public Term getEntity(Cursor c){

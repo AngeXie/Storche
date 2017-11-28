@@ -93,7 +93,7 @@
                     android:layout_marginBottom="50dp"
                     android:src="@drawable/pic_add"
                     android:elevation="8dp"
-                    app:floatingActionButtonColor="#5b9bd5"
+                    app:floatingActionButtonColor="@color/event_color_02"
                     app:floatingActionButtonImplicitElevation="false"
                     />
             </RelativeLayout>
