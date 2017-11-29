@@ -40,9 +40,9 @@ import com.einzbern.storche.entity.Term;
 import com.einzbern.storche.entity.Week;
 import com.einzbern.storche.services.DisCourseService;
 import com.einzbern.storche.util.ColorGetter;
+import com.einzbern.storche.util.GetweekUtil;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.gc.materialdesign.views.ButtonRectangle;
-import com.githang.statusbar.StatusBarCompat;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -80,6 +80,7 @@ public class CoursesActivity extends AppCompatActivity {
     DisCourseService disCourseService;
     ButtonRectangle btn_clearData, btn_inputData;
     ImageView img_backToIndex;
+    TextView tv_curWeek;
     DbHelper dbHelper;
     String[][] curWeekCourse;
     TextView[][] courses;
@@ -89,6 +90,7 @@ public class CoursesActivity extends AppCompatActivity {
     ArrayList<String> intentDatas;
     boolean showAdd;
     String path;
+    int i_curWeek;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +107,7 @@ public class CoursesActivity extends AppCompatActivity {
         img_backToIndex = (ImageView) findViewById(R.id.img_back_to_index);
         btn_clearData = (ButtonRectangle) findViewById(R.id.btn_delete_data_course_term);
         btn_inputData = (ButtonRectangle) findViewById(R.id.btn_inputFromExcel);
+        tv_curWeek = (TextView) findViewById(R.id.tv_course_curWeek);
         dbHelper = new DbHelper(this);
         courses = new TextView[5][4];
         lyCourses = new LinearLayout[5][4];
@@ -114,9 +117,17 @@ public class CoursesActivity extends AppCompatActivity {
     }
 
     private void refreshActivity(){
+        String s_curWeek = "";
+        if ((new GetweekUtil(new TermDao(this).getStartDay())).getWeekNum() ==0){
+            s_curWeek = "";
+        }else {
+            i_curWeek = (new GetweekUtil(new TermDao(this).getStartDay())).getWeekNum();
+            s_curWeek = "第"+(new GetweekUtil(new TermDao(this).getStartDay())).getWeekNum()+"周";
+        }
+        tv_curWeek.setText(s_curWeek);
         initLyCourses();
         clearAllCourseView();
-        curWeekCourse = disCourseService.getWeekCourses(new CourseDao(getApplicationContext()));
+        curWeekCourse = disCourseService.getWeekCourses(new CourseDao(getApplicationContext()), i_curWeek);
         addAllCourseView();
         setAddListners();
     }

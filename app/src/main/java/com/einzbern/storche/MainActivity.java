@@ -104,7 +104,12 @@ public class MainActivity extends AppCompatActivity {
         initData();
         initCalenderView();
         if(checkSqlNotNull()){
-            termWeek ="第" + new GetweekUtil(startDate).getWeekNum() + "周";
+            Log.e("start",startDate.toString());
+            int i_week = new GetweekUtil(startDate).getWeekNum();
+            if (i_week != 0) {
+                termWeek = "第" + i_week +"周";
+            }
+            Log.e("i_week", ""+i_week);
         }else {
             termWeek = "";
         }
@@ -117,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         String end;
         if(checkSqlNotNull()) {
             start = termDao.getStartDay();
-            end = termDao.getEndDay();
+           end = termDao.getEndDay();
             startDate = strToDateUtil.getDate(start);
             vocationDate = strToDateUtil.getDate(end);
 

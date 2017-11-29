@@ -36,10 +36,9 @@ public class DisCourseService{
     */
     private int curWeek;
     public DisCourseService(){
-        curWeek = 6;
     }
 
-    public String[][] getWeekCourses(CourseDao courseDao){
+    public String[][] getWeekCourses(CourseDao courseDao, int curWeek){
         ArrayList<Course>courses = courseDao.getAllCourses();
         String[][] weekCourses = new String[5][4];
         weekCourses = initcourseMsg(weekCourses);

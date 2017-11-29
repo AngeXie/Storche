@@ -13,21 +13,16 @@ public class GetweekUtil {
      * 当前日期与给定日期相隔周数 "yyyy-MM-dd"
      * 返回 int 值 周数
      */
-    public int weekNum;
-    Calendar endCalendar;
-    Date endDate;
+    private int weekNum;
+    private Calendar endCalendar;
+    private Date endDate;
 
-    Calendar startCalendar;
-    Date startDate;
+    private Calendar startCalendar;
+    private Date startDate;
+    private String startDatestr;
     public GetweekUtil(String startDate){//date "yyyy-MM-dd"
-        this.startDate = toDate(startDate);
-        startCalendar = Calendar.getInstance();
-        startCalendar.setTime(this.startDate);
+        this.startDatestr = startDate;
 
-        this.endDate = new Date(System.currentTimeMillis());
-        endCalendar = Calendar.getInstance();
-        endCalendar.setTime(this.endDate);
-        weekNum = 0;
 
     }
     public GetweekUtil(Date startDate){
@@ -71,10 +66,22 @@ public class GetweekUtil {
     }
 
     public int getWeekNum() {
-        weekNum = 0;
+        if((startDatestr == null || startDatestr.length() ==0) &&
+                (startDate == null)){
+            return 0;
+        }
         long days = 0;
+        if (startDatestr != null) {
+            startDate = toDate(startDatestr);
+        }
+        startCalendar = Calendar.getInstance();
+        startCalendar.setTime(this.startDate);
+
+        this.endDate = new Date(System.currentTimeMillis());
+        endCalendar = Calendar.getInstance();
+        endCalendar.setTime(this.endDate);
+        weekNum = 0;
         days = (endDate.getTime() - startDate.getTime())/(24*60*60*1000) + getExtraDays(startCalendar) +7 - getExtraDays(endCalendar);
-        System.out.println("days:" +days);
         weekNum = (int) (days/7);
         return weekNum;
     }
